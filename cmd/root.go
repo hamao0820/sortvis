@@ -10,6 +10,7 @@ import (
 var (
 	interactive bool
 	num         int
+	duration    int
 )
 
 var rootCmd = &cobra.Command{
@@ -20,7 +21,11 @@ var rootCmd = &cobra.Command{
 		if num <= 0 || num >= 100 {
 			cobra.CheckErr("num must be between 0 and 99")
 		}
-		gui.Run(num, interactive)
+		if duration <= 0 {
+			cobra.CheckErr("duration must be greater than 0")
+		}
+
+		gui.Run(num, duration, interactive)
 		return nil
 	},
 }
@@ -35,4 +40,5 @@ func Execute() {
 func init() {
 	rootCmd.Flags().BoolVarP(&interactive, "interactive", "i", false, "interactive mode")
 	rootCmd.Flags().IntVarP(&num, "num", "n", 50, "number of elements")
+	rootCmd.Flags().IntVarP(&duration, "duration", "d", 300, "duration of each step in milliseconds")
 }

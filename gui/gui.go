@@ -20,7 +20,7 @@ const (
 	max = 100
 )
 
-func Run(num int, interact bool) {
+func Run(num int, duration int, interact bool) {
 	t, err := tcell.New()
 	if err != nil {
 		panic(err)
@@ -53,7 +53,7 @@ func Run(num int, interact bool) {
 	if interact {
 		go playBarChartByKey(ctx, bc, values, 10*time.Millisecond)
 	} else {
-		go playBarChartByTick(ctx, bc, values, 300*time.Millisecond, sortChan)
+		go playBarChartByTick(ctx, bc, values, time.Duration(duration)*time.Millisecond, sortChan)
 	}
 
 	c, err := container.New(
