@@ -28,7 +28,7 @@ func main() {
 	defer t.Close()
 
 	var values []int
-	for i := 0; i < 50; i++ {
+	for i := 0; i < 99; i++ {
 		values = append(values, rand.Intn(max+1))
 	}
 
@@ -49,7 +49,7 @@ func main() {
 
 	sortChan := make(chan int, 1)
 	defer close(sortChan)
-	go sort.BubbleSortAsync(values, sortChan)
+	go sort.MergeSortAsync(values, sortChan)
 	go playBarChart(ctx, bc, values, 300*time.Millisecond, sortChan)
 
 	c, err := container.New(
