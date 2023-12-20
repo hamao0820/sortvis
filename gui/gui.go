@@ -20,7 +20,15 @@ const (
 	max = 100
 )
 
-func Run(num int, duration int, interact bool) {
+type Algorithm string
+
+const (
+	Bubble Algorithm = "bubble"
+	Heap   Algorithm = "heap"
+	Merge  Algorithm = "merge"
+)
+
+func Run(num int, duration int, algorithms Algorithm, interact bool) {
 	t, err := tcell.New()
 	if err != nil {
 		panic(err)
@@ -49,7 +57,16 @@ func Run(num int, duration int, interact bool) {
 
 	sortChan := make(chan int, 1)
 	defer close(sortChan)
-	go sort.BubbleSortAsync(values, sortChan)
+
+	switch algorithms {
+	case Bubble:
+		go sort.BubbleSortAsync(values, sortChan)
+	case Heap:
+		go sort.HeapsortAsync(values, sortChan)
+	case Merge:
+		go sort.MergeSortAsync(values, sortChan)
+	}
+
 	if interact {
 		go playBarChartByKey(ctx, bc, values, 10*time.Millisecond)
 	} else {

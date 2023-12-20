@@ -3,7 +3,6 @@ package cmd
 import (
 	"os"
 
-	"github.com/hamao0820/sortvis/gui"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +24,6 @@ var rootCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		gui.Run(num, duration, interactive)
 		return nil
 	},
 }
