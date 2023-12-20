@@ -49,7 +49,7 @@ func main() {
 
 	sortChan := make(chan int, 1)
 	defer close(sortChan)
-	go sort.MergeSortAsync(values, sortChan)
+	go sort.HeapsortAsync(values, sortChan)
 	go playBarChart(ctx, bc, values, 300*time.Millisecond, sortChan)
 
 	c, err := container.New(
