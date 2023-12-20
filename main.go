@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/hamao0820/sortvis/sort"
 	"github.com/mum4k/termdash"
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/container"
@@ -27,7 +28,7 @@ func main() {
 	defer t.Close()
 
 	var values []int
-	for i := 0; i < 99; i++ {
+	for i := 0; i < 50; i++ {
 		values = append(values, rand.Intn(max+1))
 	}
 
@@ -46,7 +47,10 @@ func main() {
 		panic(err)
 	}
 
-	go playBarChart(ctx, bc, values, 1*time.Second)
+	sortChan := make(chan int, 1)
+	defer close(sortChan)
+	go sort.BubbleSortAsync(values, sortChan)
+	go playBarChart(ctx, bc, values, 300*time.Millisecond, sortChan)
 
 	c, err := container.New(
 		t,
@@ -69,13 +73,16 @@ func main() {
 	}
 }
 
-func playBarChart(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration) {
+func playBarChart(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, channel chan int) {
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
+
 	for {
 		select {
 		case <-ticker.C:
-
+			if !sort.ValidSorted(values) {
+				channel <- 1
+			}
 			if err := bc.Values(values, max); err != nil {
 				panic(err)
 			}
