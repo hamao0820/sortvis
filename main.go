@@ -49,8 +49,9 @@ func main() {
 
 	sortChan := make(chan int, 1)
 	defer close(sortChan)
-	go sort.HeapsortAsync(values, sortChan)
-	go playBarChart(ctx, bc, values, 300*time.Millisecond, sortChan)
+	go sort.BubbleSortAsync(values, sortChan)
+	// go playBarChartByTick(ctx, bc, values, 300*time.Millisecond, sortChan)
+	go playBarChartByKey(ctx, bc, values, 10*time.Millisecond)
 
 	c, err := container.New(
 		t,
@@ -62,18 +63,39 @@ func main() {
 		panic(err)
 	}
 
-	quitter := func(k *terminalapi.Keyboard) {
+	keyboardHandler := func(k *terminalapi.Keyboard) {
 		if k.Key == 'q' || k.Key == 'Q' || k.Key == keyboard.KeyCtrlC {
 			cancel()
 		}
+		if k.Key == keyboard.KeySpace || k.Key == 'N' {
+			if !sort.ValidSorted(values) {
+				sortChan <- 1
+			}
+		}
 	}
-
-	if err := termdash.Run(ctx, t, c, termdash.KeyboardSubscriber(quitter)); err != nil {
+	if err := termdash.Run(ctx, t, c, termdash.KeyboardSubscriber(keyboardHandler)); err != nil {
 		panic(err)
 	}
 }
 
-func playBarChart(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, channel chan int) {
+func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration) {
+	ticker := time.NewTicker(delay)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case <-ticker.C:
+			if err := bc.Values(values, max); err != nil {
+				panic(err)
+			}
+
+		case <-ctx.Done():
+			return
+		}
+	}
+}
+
+func playBarChartByTick(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, channel chan int) {
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
 
