@@ -8,10 +8,15 @@ import (
 	"github.com/mum4k/termdash"
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/container"
+	"github.com/mum4k/termdash/keyboard"
 	"github.com/mum4k/termdash/linestyle"
 	"github.com/mum4k/termdash/terminal/tcell"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 	"github.com/mum4k/termdash/widgets/barchart"
+)
+
+const (
+	max = 100
 )
 
 func main() {
@@ -23,39 +28,27 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	bc, err := barchart.New(
-		barchart.BarColors([]cell.Color{
-			cell.ColorBlue,
-			cell.ColorRed,
-			cell.ColorYellow,
-			cell.ColorBlue,
-			cell.ColorGreen,
-			cell.ColorRed,
-		}),
-		barchart.ValueColors([]cell.Color{
-			cell.ColorRed,
-			cell.ColorYellow,
-			cell.ColorNumber(33),
-			cell.ColorGreen,
-			cell.ColorRed,
-			cell.ColorNumber(33),
-		}),
 		barchart.ShowValues(),
-		barchart.BarWidth(8),
-		barchart.Labels([]string{
-			"CPU1",
-			"",
-			"CPU3",
+		barchart.BarColors([]cell.Color{
+			cell.ColorRed,
 		}),
+		barchart.BarWidth(4),
 	)
 	if err != nil {
 		panic(err)
 	}
-	go playBarChart(ctx, bc, 1*time.Second)
+
+	var values []int
+	for i := 0; i < bc.ValueCapacity(); i++ {
+		values = append(values, rand.Intn(max+1))
+	}
+
+	go playBarChart(ctx, bc, values, 1*time.Second)
 
 	c, err := container.New(
 		t,
 		container.Border(linestyle.Light),
-		container.BorderTitle("PRESS Q TO QUIT"),
+		container.BorderTitle("PRESS Q/Ctrl+C TO QUIT"),
 		container.PlaceWidget(bc),
 	)
 	if err != nil {
@@ -63,7 +56,7 @@ func main() {
 	}
 
 	quitter := func(k *terminalapi.Keyboard) {
-		if k.Key == 'q' || k.Key == 'Q' {
+		if k.Key == 'q' || k.Key == 'Q' || k.Key == keyboard.KeyCtrlC {
 			cancel()
 		}
 	}
@@ -73,18 +66,18 @@ func main() {
 	}
 }
 
-func playBarChart(ctx context.Context, bc *barchart.BarChart, delay time.Duration) {
-	const max = 100
-
+func playBarChart(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration) {
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
-			var values []int
-			for i := 0; i < bc.ValueCapacity(); i++ {
-				values = append(values, int(rand.Int31n(max+1)))
+			for len(values) < bc.ValueCapacity() {
+				values = append(values, rand.Intn(max+1))
 			}
+
+			values = append(values, values[0])
+			values = values[1:]
 
 			if err := bc.Values(values, max); err != nil {
 				panic(err)
