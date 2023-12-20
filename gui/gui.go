@@ -7,13 +7,14 @@ import (
 
 	"github.com/hamao0820/sortvis/sort"
 	"github.com/mum4k/termdash"
-	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/container"
 	"github.com/mum4k/termdash/keyboard"
 	"github.com/mum4k/termdash/linestyle"
 	"github.com/mum4k/termdash/terminal/tcell"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 	"github.com/mum4k/termdash/widgets/barchart"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const (
@@ -28,7 +29,7 @@ const (
 	Merge  Algorithm = "merge"
 )
 
-func Run(num int, duration int, algorithms Algorithm, interact bool) {
+func Run(num int, duration int, algorithm Algorithm, interact bool) {
 	t, err := tcell.New()
 	if err != nil {
 		panic(err)
@@ -43,12 +44,6 @@ func Run(num int, duration int, algorithms Algorithm, interact bool) {
 	ctx, cancel := context.WithCancel(context.Background())
 	bc, err := barchart.New(
 		barchart.ShowValues(),
-		barchart.BarColors([]cell.Color{
-			cell.ColorRed,
-		}),
-		barchart.ValueColors([]cell.Color{
-			cell.ColorNavy,
-		}),
 		barchart.BarWidth(1+50/len(values)), // len(values) > 50 ? 1 : 2
 	)
 	if err != nil {
@@ -58,7 +53,7 @@ func Run(num int, duration int, algorithms Algorithm, interact bool) {
 	sortChan := make(chan int, 1)
 	defer close(sortChan)
 
-	switch algorithms {
+	switch algorithm {
 	case Bubble:
 		go sort.BubbleSortAsync(values, sortChan)
 	case Heap:
@@ -73,10 +68,14 @@ func Run(num int, duration int, algorithms Algorithm, interact bool) {
 		go playBarChartByTick(ctx, bc, values, time.Duration(duration)*time.Millisecond, sortChan)
 	}
 
+	title := cases.Title(language.English).String(string(algorithm) + " sort")
+	if interact {
+		title += " / press space to next step"
+	}
 	c, err := container.New(
 		t,
 		container.Border(linestyle.Light),
-		container.BorderTitle("PRESS Q/Ctrl+C TO QUIT"),
+		container.BorderTitle(title),
 		container.PlaceWidget(bc),
 	)
 	if err != nil {
