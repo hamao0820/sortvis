@@ -20,7 +20,7 @@ const (
 	max = 100
 )
 
-func Run() {
+func Run(interact bool) {
 	t, err := tcell.New()
 	if err != nil {
 		panic(err)
@@ -50,8 +50,11 @@ func Run() {
 	sortChan := make(chan int, 1)
 	defer close(sortChan)
 	go sort.BubbleSortAsync(values, sortChan)
-	// go playBarChartByTick(ctx, bc, values, 300*time.Millisecond, sortChan)
-	go playBarChartByKey(ctx, bc, values, 10*time.Millisecond)
+	if interact {
+		go playBarChartByKey(ctx, bc, values, 10*time.Millisecond)
+	} else {
+		go playBarChartByTick(ctx, bc, values, 300*time.Millisecond, sortChan)
+	}
 
 	c, err := container.New(
 		t,
@@ -67,9 +70,11 @@ func Run() {
 		if k.Key == 'q' || k.Key == 'Q' || k.Key == keyboard.KeyCtrlC {
 			cancel()
 		}
-		if k.Key == keyboard.KeySpace || k.Key == 'N' {
-			if !sort.ValidSorted(values) {
-				sortChan <- 1
+		if interact {
+			if k.Key == keyboard.KeySpace || k.Key == 'N' {
+				if !sort.ValidSorted(values) {
+					sortChan <- 1
+				}
 			}
 		}
 	}
