@@ -20,7 +20,7 @@ const (
 	max = 100
 )
 
-func Run(interact bool) {
+func Run(num int, interact bool) {
 	t, err := tcell.New()
 	if err != nil {
 		panic(err)
@@ -28,7 +28,7 @@ func Run(interact bool) {
 	defer t.Close()
 
 	var values []int
-	for i := 0; i < 99; i++ {
+	for i := 0; i < num; i++ {
 		values = append(values, rand.Intn(max+1))
 	}
 
