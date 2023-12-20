@@ -7,12 +7,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	interactive bool
+)
+
 var rootCmd = &cobra.Command{
 	Use:   "sortvis",
 	Short: "Visualize sorting algorithms",
 	Long:  `Visualize sorting algorithms`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		gui.Run(false)
+		gui.Run(interactive)
 		return nil
 	},
 }
@@ -25,4 +29,5 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.Flags().BoolVarP(&interactive, "interactive", "i", false, "interactive mode")
 }
