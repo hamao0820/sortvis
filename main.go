@@ -26,21 +26,24 @@ func main() {
 	}
 	defer t.Close()
 
+	var values []int
+	for i := 0; i < 99; i++ {
+		values = append(values, rand.Intn(max+1))
+	}
+
 	ctx, cancel := context.WithCancel(context.Background())
 	bc, err := barchart.New(
 		barchart.ShowValues(),
 		barchart.BarColors([]cell.Color{
 			cell.ColorRed,
 		}),
-		barchart.BarWidth(4),
+		barchart.ValueColors([]cell.Color{
+			cell.ColorNavy,
+		}),
+		barchart.BarWidth(1+50/len(values)), // len(values) > 50 ? 1 : 2
 	)
 	if err != nil {
 		panic(err)
-	}
-
-	var values []int
-	for i := 0; i < bc.ValueCapacity(); i++ {
-		values = append(values, rand.Intn(max+1))
 	}
 
 	go playBarChart(ctx, bc, values, 1*time.Second)
@@ -72,12 +75,6 @@ func playBarChart(ctx context.Context, bc *barchart.BarChart, values []int, dela
 	for {
 		select {
 		case <-ticker.C:
-			for len(values) < bc.ValueCapacity() {
-				values = append(values, rand.Intn(max+1))
-			}
-
-			values = append(values, values[0])
-			values = values[1:]
 
 			if err := bc.Values(values, max); err != nil {
 				panic(err)
