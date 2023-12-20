@@ -36,7 +36,7 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.Flags().BoolVarP(&interactive, "interactive", "i", false, "interactive mode")
-	rootCmd.Flags().IntVarP(&num, "num", "n", 50, "number of elements")
-	rootCmd.Flags().IntVarP(&duration, "duration", "d", 300, "duration of each step in milliseconds")
+	rootCmd.PersistentFlags().BoolVarP(&interactive, "interactive", "i", false, "interactive mode")
+	rootCmd.PersistentFlags().IntVarP(&num, "num", "n", 50, "number of elements")
+	rootCmd.PersistentFlags().IntVarP(&duration, "duration", "d", 300, "duration of each step in milliseconds")
 }
