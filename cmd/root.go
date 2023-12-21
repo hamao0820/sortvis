@@ -20,9 +20,8 @@ var rootCmd = &cobra.Command{
 	Use:   "sortvis",
 	Short: "Visualize sorting algorithms",
 	Long: `Visualize sorting algorithms.
-algorithms: bubble, merge, heap
-in interactive mode, you can step forward by pressing space
-press q or Ctrl+C to quit`,
+in interactive mode, you can step forward by pressing space.
+Press q or Ctrl+C to quit`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if ls {
 			cmd.Println("You can use the following algorithms(subcommands):")
