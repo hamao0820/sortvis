@@ -6,8 +6,6 @@ import (
 	"github.com/hamao0820/sortvis/gui"
 	"github.com/hamao0820/sortvis/util"
 	"github.com/spf13/cobra"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 var (
@@ -29,8 +27,7 @@ press q or Ctrl+C to quit`,
 		if ls {
 			cmd.Println("You can use the following algorithms(subcommands):")
 			for _, v := range []gui.Algorithm{gui.Bubble, gui.Merge, gui.Heap} {
-				name := cases.Title(language.English).String(string(v) + " sort")
-				cmd.Println(name + "(" + string(v) + ")")
+				cmd.Println(v.Pretty() + "(" + v.String() + ")")
 			}
 			return
 		}

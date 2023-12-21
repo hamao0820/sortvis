@@ -14,20 +14,10 @@ import (
 	"github.com/mum4k/termdash/terminal/tcell"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 	"github.com/mum4k/termdash/widgets/barchart"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 )
 
 const (
 	max = 100
-)
-
-type Algorithm string
-
-const (
-	Bubble Algorithm = "bubble"
-	Heap   Algorithm = "heap"
-	Merge  Algorithm = "merge"
 )
 
 func Run(num int, duration int, algorithm Algorithm, file string, interact bool) error {
@@ -76,7 +66,7 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		go playBarChartByTick(ctx, bc, values, time.Duration(duration)*time.Millisecond, sortChan)
 	}
 
-	title := cases.Title(language.English).String(string(algorithm) + " sort")
+	title := algorithm.Pretty()
 	if interact {
 		title += " / press space to next step"
 	}
