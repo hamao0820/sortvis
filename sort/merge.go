@@ -4,8 +4,8 @@ func MergeSort(arr []int) {
 	mergeSort(arr, 0, len(arr)-1)
 }
 
-func MergeSortAsync(arr []int, channel chan int) {
-	mergeSortAsync(arr, 0, len(arr)-1, channel)
+func MergeSortAsync(arr []int, c chan int) {
+	mergeSortAsync(arr, 0, len(arr)-1, c)
 }
 
 func merge(arr []int, left, mid, right int) {
@@ -53,18 +53,18 @@ func mergeSort(arr []int, left, right int) {
 	}
 }
 
-func mergeSortAsync(arr []int, left, right int, channel chan int) {
+func mergeSortAsync(arr []int, left, right int, c chan int) {
 	if left < right {
 		mid := (left + right) / 2
 
-		mergeSortAsync(arr, left, mid, channel)
-		mergeSortAsync(arr, mid+1, right, channel)
+		mergeSortAsync(arr, left, mid, c)
+		mergeSortAsync(arr, mid+1, right, c)
 
-		mergeAsync(arr, left, mid, right, channel)
+		mergeAsync(arr, left, mid, right, c)
 	}
 }
 
-func mergeAsync(arr []int, left, mid, right int, channel chan int) {
+func mergeAsync(arr []int, left, mid, right int, c chan int) {
 	tmp := make([]int, right-left+1)
 	i := left
 	j := mid + 1
@@ -94,7 +94,7 @@ func mergeAsync(arr []int, left, mid, right int, channel chan int) {
 	}
 
 	for i := 0; i < k; i++ {
-		<-channel
+		<-c
 		arr[left+i] = tmp[i]
 	}
 }

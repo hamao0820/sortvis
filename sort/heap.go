@@ -9,11 +9,11 @@ func Heapsort(arr []int) {
 	}
 }
 
-func HeapsortAsync(arr []int, channel chan int) {
-	heapifyAsync(arr, channel)
+func HeapsortAsync(arr []int, c chan int) {
+	heapifyAsync(arr, c)
 	for i := len(arr) - 1; i > 0; i-- {
-		<-channel
-		arr[i] = deletemaxAsync(arr[:i+1], channel)
+		<-c
+		arr[i] = deletemaxAsync(arr[:i+1], c)
 	}
 }
 
@@ -47,13 +47,13 @@ func deletemax(arr []int) int {
 	return max
 }
 
-func heapifyAsync(arr []int, channel chan int) {
+func heapifyAsync(arr []int, c chan int) {
 	for i := len(arr)/2 - 1; i >= 0; i-- {
-		downmaxAsync(i, arr, len(arr), channel)
+		downmaxAsync(i, arr, len(arr), c)
 	}
 }
 
-func downmaxAsync(i int, arr []int, n int, channel chan int) {
+func downmaxAsync(i int, arr []int, n int, c chan int) {
 	j := 2*i + 1
 
 	if j >= n {
@@ -65,15 +65,15 @@ func downmaxAsync(i int, arr []int, n int, channel chan int) {
 	}
 
 	if arr[j] > arr[i] {
-		<-channel
+		<-c
 		swap(&arr[i], &arr[j])
-		downmaxAsync(j, arr, n, channel)
+		downmaxAsync(j, arr, n, c)
 	}
 }
 
-func deletemaxAsync(arr []int, channel chan int) int {
+func deletemaxAsync(arr []int, c chan int) int {
 	max := arr[0]
 	arr[0] = arr[len(arr)-1]
-	downmaxAsync(0, arr, len(arr)-1, channel)
+	downmaxAsync(0, arr, len(arr)-1, c)
 	return max
 }
