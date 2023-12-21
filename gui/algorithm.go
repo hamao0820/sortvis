@@ -8,10 +8,11 @@ import (
 type Algorithm string
 
 const (
-	Bubble Algorithm = "bubble"
-	Heap   Algorithm = "heap"
-	Merge  Algorithm = "merge"
-	Quick  Algorithm = "quick"
+	Bubble    Algorithm = "bubble"
+	Heap      Algorithm = "heap"
+	Merge     Algorithm = "merge"
+	Quick     Algorithm = "quick"
+	Selection Algorithm = "selection"
 )
 
 func (a Algorithm) String() string {
