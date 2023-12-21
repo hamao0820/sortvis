@@ -15,7 +15,10 @@ var (
 var rootCmd = &cobra.Command{
 	Use:   "sortvis",
 	Short: "Visualize sorting algorithms",
-	Long:  `Visualize sorting algorithms`,
+	Long: `Visualize sorting algorithms.
+algorithms: bubble, merge, heap
+in interactive mode, you can step forward
+press q or Ctrl+C to quit`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if num <= 0 || num >= 100 {
 			cobra.CheckErr("num must be between 1 and 99")
