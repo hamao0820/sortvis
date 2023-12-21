@@ -3,8 +3,11 @@ package cmd
 import (
 	"os"
 
+	"github.com/hamao0820/sortvis/gui"
 	"github.com/hamao0820/sortvis/util"
 	"github.com/spf13/cobra"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 var (
@@ -12,6 +15,7 @@ var (
 	num         int
 	duration    int
 	file        string
+	ls          bool
 )
 
 var rootCmd = &cobra.Command{
@@ -22,6 +26,14 @@ algorithms: bubble, merge, heap
 in interactive mode, you can step forward
 press q or Ctrl+C to quit`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if ls {
+			cmd.Println("You can use the following algorithms(subcommands):")
+			for _, v := range []gui.Algorithm{gui.Bubble, gui.Merge, gui.Heap} {
+				name := cases.Title(language.English).String(string(v) + " sort")
+				cmd.Println(name + "(" + string(v) + ")")
+			}
+			return
+		}
 		cmd.Println(util.Logo)
 	},
 }
@@ -38,4 +50,5 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&num, "num", "n", 50, "number of elements")
 	rootCmd.PersistentFlags().IntVarP(&duration, "duration", "d", 300, "duration of each step in milliseconds")
 	rootCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "file path: number of lines must be 0 < n < 100, each line must be 0 <= n <= 100")
+	rootCmd.Flags().BoolVarP(&ls, "ls", "l", false, "list all algorithms")
 }
