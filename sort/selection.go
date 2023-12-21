@@ -13,7 +13,7 @@ func SelectionSort(arr []int) {
 	}
 }
 
-func SelectionSortAsync(arr []int, c chan int) {
+func SelectionSortAsync(arr []int, c chan struct{}) {
 	for i := 0; i < len(arr); i++ {
 		min := i
 		for j := i + 1; j < len(arr); j++ {

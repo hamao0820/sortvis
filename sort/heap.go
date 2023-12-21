@@ -9,7 +9,7 @@ func Heapsort(arr []int) {
 	}
 }
 
-func HeapsortAsync(arr []int, c chan int) {
+func HeapsortAsync(arr []int, c chan struct{}) {
 	heapifyAsync(arr, c)
 	for i := len(arr) - 1; i > 0; i-- {
 		<-c
@@ -47,13 +47,13 @@ func deletemax(arr []int) int {
 	return max
 }
 
-func heapifyAsync(arr []int, c chan int) {
+func heapifyAsync(arr []int, c chan struct{}) {
 	for i := len(arr)/2 - 1; i >= 0; i-- {
 		downmaxAsync(i, arr, len(arr), c)
 	}
 }
 
-func downmaxAsync(i int, arr []int, n int, c chan int) {
+func downmaxAsync(i int, arr []int, n int, c chan struct{}) {
 	j := 2*i + 1
 
 	if j >= n {
@@ -71,7 +71,7 @@ func downmaxAsync(i int, arr []int, n int, c chan int) {
 	}
 }
 
-func deletemaxAsync(arr []int, c chan int) int {
+func deletemaxAsync(arr []int, c chan struct{}) int {
 	max := arr[0]
 	arr[0] = arr[len(arr)-1]
 	downmaxAsync(0, arr, len(arr)-1, c)

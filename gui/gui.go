@@ -50,7 +50,7 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		return err
 	}
 
-	sortChan := make(chan int, 1)
+	sortChan := make(chan struct{})
 	defer close(sortChan)
 
 	switch algorithm {
@@ -95,7 +95,7 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		if interact {
 			if k.Key == keyboard.KeySpace || k.Key == 'N' {
 				if !sort.ValidSorted(values) {
-					sortChan <- 1
+					sortChan <- struct{}{}
 				}
 			}
 		}
@@ -124,7 +124,7 @@ func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int,
 	}
 }
 
-func playBarChartByTick(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, channel chan int) {
+func playBarChartByTick(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, channel chan struct{}) {
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
 
@@ -132,7 +132,7 @@ func playBarChartByTick(ctx context.Context, bc *barchart.BarChart, values []int
 		select {
 		case <-ticker.C:
 			if !sort.ValidSorted(values) {
-				channel <- 1
+				channel <- struct{}{}
 			}
 			if err := bc.Values(values, max); err != nil {
 				panic(err)

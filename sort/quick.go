@@ -1,6 +1,6 @@
 package sort
 
-func QuickSortAsync(arr []int, c chan int) {
+func QuickSortAsync(arr []int, c chan struct{}) {
 	quickSortAsync(arr, 0, len(arr)-1, c)
 }
 
@@ -31,7 +31,7 @@ func partition(arr []int, left, right int) int {
 	return i
 }
 
-func quickSortAsync(arr []int, left, right int, c chan int) {
+func quickSortAsync(arr []int, left, right int, c chan struct{}) {
 	if left >= right {
 		return
 	}
@@ -41,7 +41,7 @@ func quickSortAsync(arr []int, left, right int, c chan int) {
 	quickSortAsync(arr, pivot+1, right, c)
 }
 
-func partitionAsync(arr []int, left, right int, c chan int) int {
+func partitionAsync(arr []int, left, right int, c chan struct{}) int {
 	pivot := arr[right]
 	i := left
 	for j := left; j < right; j++ {

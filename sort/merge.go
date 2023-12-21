@@ -4,7 +4,7 @@ func MergeSort(arr []int) {
 	mergeSort(arr, 0, len(arr)-1)
 }
 
-func MergeSortAsync(arr []int, c chan int) {
+func MergeSortAsync(arr []int, c chan struct{}) {
 	mergeSortAsync(arr, 0, len(arr)-1, c)
 }
 
@@ -53,7 +53,7 @@ func mergeSort(arr []int, left, right int) {
 	}
 }
 
-func mergeSortAsync(arr []int, left, right int, c chan int) {
+func mergeSortAsync(arr []int, left, right int, c chan struct{}) {
 	if left < right {
 		mid := (left + right) / 2
 
@@ -64,7 +64,7 @@ func mergeSortAsync(arr []int, left, right int, c chan int) {
 	}
 }
 
-func mergeAsync(arr []int, left, mid, right int, c chan int) {
+func mergeAsync(arr []int, left, mid, right int, c chan struct{}) {
 	tmp := make([]int, right-left+1)
 	i := left
 	j := mid + 1

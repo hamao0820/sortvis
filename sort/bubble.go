@@ -10,7 +10,7 @@ func BubbleSort(arr []int) {
 	}
 }
 
-func BubbleSortAsync(arr []int, c chan int) {
+func BubbleSortAsync(arr []int, c chan struct{}) {
 	for i := 0; i < len(arr); i++ {
 		for j := 0; j < len(arr)-1-i; j++ {
 			if arr[j] > arr[j+1] {

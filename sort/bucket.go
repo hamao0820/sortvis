@@ -31,7 +31,7 @@ func BucketSort(arr []int) {
 	}
 }
 
-func BucketSortAsync(arr []int, c chan int) {
+func BucketSortAsync(arr []int, c chan struct{}) {
 	n := len(arr)
 	if n <= 1 {
 		return
