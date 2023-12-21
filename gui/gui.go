@@ -30,10 +30,10 @@ const (
 	Merge  Algorithm = "merge"
 )
 
-func Run(num int, duration int, algorithm Algorithm, file string, interact bool) {
+func Run(num int, duration int, algorithm Algorithm, file string, interact bool) error {
 	t, err := tcell.New()
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer t.Close()
 
@@ -41,7 +41,7 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 	if file != "" {
 		values, err = util.ReadFileAndConvertToIntSlice(file)
 		if err != nil {
-			panic(err)
+			return err
 		}
 	} else {
 		for i := 0; i < num; i++ {
@@ -55,7 +55,7 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		barchart.BarWidth(1+50/len(values)), // len(values) > 50 ? 1 : 2
 	)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	sortChan := make(chan int, 1)
@@ -87,7 +87,7 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		container.PlaceWidget(bc),
 	)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	keyboardHandler := func(k *terminalapi.Keyboard) {
@@ -103,8 +103,10 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		}
 	}
 	if err := termdash.Run(ctx, t, c, termdash.KeyboardSubscriber(keyboardHandler)); err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
 
 func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration) {
