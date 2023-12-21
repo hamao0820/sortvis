@@ -21,7 +21,7 @@ var rootCmd = &cobra.Command{
 	Short: "Visualize sorting algorithms",
 	Long: `Visualize sorting algorithms.
 algorithms: bubble, merge, heap
-in interactive mode, you can step forward
+in interactive mode, you can step forward by pressing space
 press q or Ctrl+C to quit`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if ls {
