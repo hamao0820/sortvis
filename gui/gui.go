@@ -60,6 +60,8 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		go sort.HeapsortAsync(values, sortChan)
 	case Merge:
 		go sort.MergeSortAsync(values, sortChan)
+	case Quick:
+		go sort.QuickSortAsync(values, sortChan)
 	}
 
 	if interact {

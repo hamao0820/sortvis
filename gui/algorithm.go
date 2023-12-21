@@ -11,6 +11,7 @@ const (
 	Bubble Algorithm = "bubble"
 	Heap   Algorithm = "heap"
 	Merge  Algorithm = "merge"
+	Quick  Algorithm = "quick"
 )
 
 func (a Algorithm) String() string {
