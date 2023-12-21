@@ -17,7 +17,7 @@ var bubbleCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		gui.Run(num, duration, gui.Bubble, interactive)
+		gui.Run(num, duration, gui.Bubble, file, interactive)
 	},
 }
 

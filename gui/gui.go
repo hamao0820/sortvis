@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/hamao0820/sortvis/sort"
+	"github.com/hamao0820/sortvis/util"
 	"github.com/mum4k/termdash"
 	"github.com/mum4k/termdash/container"
 	"github.com/mum4k/termdash/keyboard"
@@ -29,7 +30,7 @@ const (
 	Merge  Algorithm = "merge"
 )
 
-func Run(num int, duration int, algorithm Algorithm, interact bool) {
+func Run(num int, duration int, algorithm Algorithm, file string, interact bool) {
 	t, err := tcell.New()
 	if err != nil {
 		panic(err)
@@ -37,8 +38,15 @@ func Run(num int, duration int, algorithm Algorithm, interact bool) {
 	defer t.Close()
 
 	var values []int
-	for i := 0; i < num; i++ {
-		values = append(values, rand.Intn(max+1))
+	if file != "" {
+		values, err = util.ReadFileAndConvertToIntSlice(file)
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		for i := 0; i < num; i++ {
+			values = append(values, rand.Intn(max+1))
+		}
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())

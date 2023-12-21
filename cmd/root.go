@@ -11,6 +11,7 @@ var (
 	interactive bool
 	num         int
 	duration    int
+	file        string
 )
 
 var rootCmd = &cobra.Command{
@@ -36,4 +37,5 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&interactive, "interactive", "i", false, "interactive mode")
 	rootCmd.PersistentFlags().IntVarP(&num, "num", "n", 50, "number of elements")
 	rootCmd.PersistentFlags().IntVarP(&duration, "duration", "d", 300, "duration of each step in milliseconds")
+	rootCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "file path: number of lines must be 0 < n < 100, each line must be 0 <= n <= 100")
 }

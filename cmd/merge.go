@@ -17,7 +17,7 @@ var mergeCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		gui.Run(num, duration, gui.Merge, interactive)
+		gui.Run(num, duration, gui.Merge, file, interactive)
 	},
 }
 

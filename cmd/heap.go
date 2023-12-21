@@ -17,7 +17,7 @@ var heapCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		gui.Run(num, duration, gui.Heap, interactive)
+		gui.Run(num, duration, gui.Heap, file, interactive)
 	},
 }
 
