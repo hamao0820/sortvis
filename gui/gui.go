@@ -40,6 +40,8 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
 	bc, err := barchart.New(
 		barchart.ShowValues(),
 		barchart.BarWidth(1+50/len(values)), // len(values) > 50 ? 1 : 2
