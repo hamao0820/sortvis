@@ -13,6 +13,7 @@ const (
 	Merge     Algorithm = "merge"
 	Quick     Algorithm = "quick"
 	Selection Algorithm = "selection"
+	Bucket    Algorithm = "bucket"
 )
 
 func (a Algorithm) String() string {

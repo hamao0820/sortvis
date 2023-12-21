@@ -26,7 +26,7 @@ press q or Ctrl+C to quit`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if ls {
 			cmd.Println("You can use the following algorithms(subcommands):")
-			for _, v := range []gui.Algorithm{gui.Bubble, gui.Merge, gui.Heap, gui.Quick, gui.Selection} {
+			for _, v := range []gui.Algorithm{gui.Bubble, gui.Merge, gui.Heap, gui.Quick, gui.Selection, gui.Bucket} {
 				cmd.Println(v.Pretty() + "(" + v.String() + ")")
 			}
 			return
