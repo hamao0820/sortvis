@@ -13,6 +13,7 @@ var (
 	num         int
 	duration    int
 	file        string
+	graph       string
 	ls          bool
 )
 
@@ -46,5 +47,7 @@ func init() {
 	rootCmd.PersistentFlags().IntVarP(&num, "num", "n", 50, "number of elements")
 	rootCmd.PersistentFlags().IntVarP(&duration, "duration", "d", 300, "duration of each step in milliseconds")
 	rootCmd.PersistentFlags().StringVarP(&file, "file", "f", "", "file path: number of lines must be 0 < n < 100, each line must be 0 <= n <= 100")
+	rootCmd.PersistentFlags().StringVarP(&graph, "graph", "g", "", `The initial value of the array is set to a certain form. Example: sin wave
+	You can check the available list with 'sortvis --graph-list'.`)
 	rootCmd.Flags().BoolVarP(&ls, "ls", "l", false, "list all algorithms")
 }
