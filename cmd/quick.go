@@ -17,7 +17,7 @@ var quickCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		err := gui.Run(num, duration, gui.Quick, file, interactive)
+		err := gui.Run(num, duration, gui.Quick, file, graph, interactive)
 		cobra.CheckErr(err)
 	},
 }

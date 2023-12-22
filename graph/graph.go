@@ -22,5 +22,7 @@ var (
 		{"des", "descending", descending},
 		{"par", "parabola(x^2)", parabola},
 		{"parI", "inverse parabola(-x^2)", parabolaInverse},
+		{"tri", "triangle", triangle},
+		{"triI", "inverse triangle", triangleInverse},
 	}
 )

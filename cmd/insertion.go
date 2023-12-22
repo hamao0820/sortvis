@@ -17,7 +17,7 @@ var insertionCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		err := gui.Run(num, duration, gui.Insertion, file, interactive)
+		err := gui.Run(num, duration, gui.Insertion, file, graph, interactive)
 		cobra.CheckErr(err)
 	},
 }

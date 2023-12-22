@@ -17,7 +17,7 @@ var bucketCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		err := gui.Run(num, duration, gui.Bucket, file, interactive)
+		err := gui.Run(num, duration, gui.Bucket, file, graph, interactive)
 		cobra.CheckErr(err)
 	},
 }

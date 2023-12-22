@@ -17,7 +17,7 @@ var selectionCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		err := gui.Run(num, duration, gui.Selection, file, interactive)
+		err := gui.Run(num, duration, gui.Selection, file, graph, interactive)
 		cobra.CheckErr(err)
 	},
 }

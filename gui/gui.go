@@ -2,9 +2,11 @@ package gui
 
 import (
 	"context"
+	"fmt"
 	"math/rand"
 	"time"
 
+	g "github.com/hamao0820/sortvis/graph"
 	"github.com/hamao0820/sortvis/sort"
 	"github.com/hamao0820/sortvis/util"
 	"github.com/mum4k/termdash"
@@ -20,7 +22,7 @@ const (
 	max = 100
 )
 
-func Run(num int, duration int, algorithm Algorithm, file string, interact bool) error {
+func Run(num int, duration int, algorithm Algorithm, file, graph string, interact bool) error {
 	t, err := tcell.New()
 	if err != nil {
 		return err
@@ -32,6 +34,18 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		values, err = util.ReadFileAndConvertToIntSlice(file)
 		if err != nil {
 			return err
+		}
+	} else if graph != "" {
+		flag := false
+		for _, v := range g.GraphList {
+			if v.Name == graph {
+				values = v.Function()
+				flag = true
+				break
+			}
+		}
+		if !flag {
+			return fmt.Errorf("graph type %s is not supported", graph)
 		}
 	} else {
 		for i := 0; i < num; i++ {
