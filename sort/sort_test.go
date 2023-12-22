@@ -88,3 +88,14 @@ func TestBucketSort(t *testing.T) {
 		})
 	}
 }
+
+func TestInsertionSort(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			InsertionSort(tt.args.arr)
+			if !reflect.DeepEqual(tt.args.arr, tt.want) {
+				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
+			}
+		})
+	}
+}
