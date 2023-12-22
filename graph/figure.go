@@ -1,6 +1,6 @@
 package graph
 
-func Square() []int {
+func square() []int {
 	var square [99]int
 	for i := 0; i < 25; i++ {
 		square[i] = 0
@@ -14,7 +14,7 @@ func Square() []int {
 	return square[:]
 }
 
-func SquareInverse() []int {
+func squareInverse() []int {
 	var square [99]int
 	for i := 0; i < 25; i++ {
 		square[i] = 75
@@ -28,7 +28,7 @@ func SquareInverse() []int {
 	return square[:]
 }
 
-func Step() []int {
+func step() []int {
 	var square [99]int
 	for i := 0; i < 25; i++ {
 		square[i] = 0
@@ -45,7 +45,7 @@ func Step() []int {
 	return square[:]
 }
 
-func StepInverse() []int {
+func stepInverse() []int {
 	var square [99]int
 	for i := 0; i < 25; i++ {
 		square[i] = 99
@@ -62,7 +62,7 @@ func StepInverse() []int {
 	return square[:]
 }
 
-func Triangle() []int {
+func triangle() []int {
 	var square [99]int
 	for i := 0; i < 50; i++ {
 		square[i] = 2 * i
@@ -73,7 +73,7 @@ func Triangle() []int {
 	return square[:]
 }
 
-func TriangleInverse() []int {
+func triangleInverse() []int {
 	var square [99]int
 	for i := 0; i < 50; i++ {
 		square[i] = 198 - 2*(i+49) - 1

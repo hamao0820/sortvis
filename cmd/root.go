@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 
+	g "github.com/hamao0820/sortvis/graph"
 	"github.com/hamao0820/sortvis/gui"
 	"github.com/hamao0820/sortvis/util"
 	"github.com/spf13/cobra"
@@ -15,6 +16,7 @@ var (
 	file        string
 	graph       string
 	ls          bool
+	graphList   bool
 )
 
 var rootCmd = &cobra.Command{
@@ -31,6 +33,15 @@ Press q or Ctrl+C to quit`,
 			}
 			return
 		}
+
+		if graphList {
+			cmd.Println("You can use the following graph types:")
+			for _, g := range g.GraphList {
+				cmd.Println(g.Name + ": " + g.Description)
+			}
+			return
+		}
+
 		cmd.Println(util.Logo)
 	},
 }
@@ -50,4 +61,5 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&graph, "graph", "g", "", `The initial value of the array is set to a certain form. Example: sin wave
 	You can check the available list with 'sortvis --graph-list'.`)
 	rootCmd.Flags().BoolVarP(&ls, "ls", "l", false, "list all algorithms")
+	rootCmd.Flags().BoolVar(&graphList, "graph-list", false, "list all graph types")
 }

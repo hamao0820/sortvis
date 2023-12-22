@@ -2,7 +2,7 @@ package graph
 
 import "math"
 
-func Sin() []int {
+func sin() []int {
 	var sin [99]int
 	for i := 0; i < 99; i++ {
 		sin[i] = int(math.Floor(math.Sin(math.Pi*float64(i)*2/99)*50 + 50))
@@ -10,7 +10,7 @@ func Sin() []int {
 	return sin[:]
 }
 
-func Sin2() []int {
+func sin2() []int {
 	var sin [99]int
 	for i := 0; i < 99; i++ {
 		sin[i] = int(math.Floor(math.Sin(math.Pi*float64(i)*4/99)*50 + 50))
@@ -18,7 +18,7 @@ func Sin2() []int {
 	return sin[:]
 }
 
-func Sin3() []int {
+func sin3() []int {
 	var sin [99]int
 	for i := 0; i < 99; i++ {
 		sin[i] = int(math.Floor(math.Sin(math.Pi*float64(i)*6/99)*50 + 50))
@@ -26,7 +26,7 @@ func Sin3() []int {
 	return sin[:]
 }
 
-func Cos() []int {
+func cos() []int {
 	var cos [99]int
 	for i := 0; i < 99; i++ {
 		cos[i] = int(math.Floor(math.Cos(math.Pi*float64(i)*2/99)*50 + 50))
@@ -34,7 +34,7 @@ func Cos() []int {
 	return cos[:]
 }
 
-func Cos2() []int {
+func cos2() []int {
 	var cos [99]int
 	for i := 0; i < 99; i++ {
 		cos[i] = int(math.Floor(math.Cos(math.Pi*float64(i)*4/99)*50 + 50))
@@ -42,7 +42,7 @@ func Cos2() []int {
 	return cos[:]
 }
 
-func Cos3() []int {
+func cos3() []int {
 	var cos [99]int
 	for i := 0; i < 99; i++ {
 		cos[i] = int(math.Floor(math.Cos(math.Pi*float64(i)*6/99)*50 + 50))
