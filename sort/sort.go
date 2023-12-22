@@ -50,17 +50,33 @@ func (s *SortIterator) step() {
 }
 
 func (s *SortIterator) Next() bool {
+	if s.Status == Done {
+		return false
+	}
+
 	if s.Status == UnInitialized {
 		return false
-	} else if s.Status == Initialized {
+	}
+
+	if s.Status == Initialized {
 		s.Status = Sorting
 
 		s.wg.Add(1)
 		go s.sort(s.Arr, s.cStep, s.cDone, s.wg)
 		s.wg.Wait()
+	}
 
-		return true
-	} else if s.Status == Sorting {
+	select {
+	case <-s.cDone:
+		s.Status = Done
+		close(s.cStep)
+		close(s.cDone)
+		return false
+	default:
+		s.wg.Add(1)
+		s.step()
+		s.wg.Wait()
+
 		select {
 		case <-s.cDone:
 			s.Status = Done
@@ -68,22 +84,8 @@ func (s *SortIterator) Next() bool {
 			close(s.cDone)
 			return false
 		default:
-			s.wg.Add(1)
-			s.step()
-			s.wg.Wait()
-
-			select {
-			case <-s.cDone:
-				s.Status = Done
-				close(s.cStep)
-				close(s.cDone)
-				return false
-			default:
-			}
 		}
-
-		return true
 	}
 
-	return false
+	return true
 }
