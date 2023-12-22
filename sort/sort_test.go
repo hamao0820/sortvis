@@ -57,6 +57,20 @@ func TestBubbleSort(t *testing.T) {
 	}
 }
 
+func TestBubbleSortAsync(t *testing.T) {
+	for _, tt := range tests {
+		bubble := Sorters["bubble"]
+		bubble.Init(tt.args.arr)
+		t.Run(tt.name, func(t *testing.T) {
+			for bubble.Next() {
+			}
+			if !reflect.DeepEqual(tt.args.arr, tt.want) {
+				t.Errorf("BubbleSortAsync() = %v, want %v", tt.args.arr, tt.want)
+			}
+		})
+	}
+}
+
 func TestMergeSort(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
