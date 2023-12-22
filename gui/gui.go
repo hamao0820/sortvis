@@ -68,6 +68,8 @@ func Run(num int, duration int, algorithm Algorithm, file string, interact bool)
 		go sort.BucketSortAsync(values, sortChan)
 	case Insertion:
 		go sort.InsertionSortAsync(values, sortChan)
+	case Shell:
+		go sort.ShellSortAsync(values, sortChan)
 	}
 
 	if interact {

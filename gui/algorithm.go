@@ -15,6 +15,7 @@ const (
 	Selection Algorithm = "selection"
 	Bucket    Algorithm = "bucket"
 	Insertion Algorithm = "insertion"
+	Shell     Algorithm = "shell"
 )
 
 func (a Algorithm) String() string {
