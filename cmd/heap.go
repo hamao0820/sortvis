@@ -6,9 +6,10 @@ import (
 )
 
 var heapCmd = &cobra.Command{
-	Use:   "heap",
-	Short: "Visualize heap sort",
-	Long:  `Visualize heap sort`,
+	Use:     "heap",
+	Version: rootCmd.Version,
+	Short:   "Visualize heap sort",
+	Long:    `Visualize heap sort`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if num <= 0 || num >= 100 {
 			cobra.CheckErr("num must be between 1 and 99")

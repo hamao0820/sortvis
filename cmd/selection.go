@@ -6,9 +6,10 @@ import (
 )
 
 var selectionCmd = &cobra.Command{
-	Use:   "selection",
-	Short: "Visualize selection sort",
-	Long:  `Visualize selection sort`,
+	Use:     "selection",
+	Version: rootCmd.Version,
+	Short:   "Visualize selection sort",
+	Long:    `Visualize selection sort`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if num <= 0 || num >= 100 {
 			cobra.CheckErr("num must be between 1 and 99")

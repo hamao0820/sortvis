@@ -20,8 +20,9 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "sortvis",
-	Short: "Visualize sorting algorithms",
+	Use:     "sortvis",
+	Version: "v0.4.1",
+	Short:   "Visualize sorting algorithms",
 	Long: `Visualize sorting algorithms.
 in interactive mode, you can step forward by pressing space.
 Press q or Ctrl+C to quit`,

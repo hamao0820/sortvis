@@ -6,9 +6,10 @@ import (
 )
 
 var mergeCmd = &cobra.Command{
-	Use:   "merge",
-	Short: "Visualize merge sort",
-	Long:  `Visualize merge sort`,
+	Use:     "merge",
+	Version: rootCmd.Version,
+	Short:   "Visualize merge sort",
+	Long:    `Visualize merge sort`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if num <= 0 || num >= 100 {
 			cobra.CheckErr("num must be between 1 and 99")

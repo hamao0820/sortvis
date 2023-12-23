@@ -6,9 +6,10 @@ import (
 )
 
 var bucketCmd = &cobra.Command{
-	Use:   "bucket",
-	Short: "Visualize bucket sort",
-	Long:  `Visualize bucket sort`,
+	Use:     "bucket",
+	Version: rootCmd.Version,
+	Short:   "Visualize bucket sort",
+	Long:    `Visualize bucket sort`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if num <= 0 || num >= 100 {
 			cobra.CheckErr("num must be between 1 and 99")
