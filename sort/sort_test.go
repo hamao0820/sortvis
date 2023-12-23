@@ -140,6 +140,20 @@ func TestBucketSort(t *testing.T) {
 	}
 }
 
+func TestBucketSortAsync(t *testing.T) {
+	for _, tt := range tests {
+		bucket := NewSorter(BucketSortAsync)
+		bucket.Init(tt.args.arr)
+		t.Run(tt.name, func(t *testing.T) {
+			for bucket.Next() {
+			}
+			if !reflect.DeepEqual(tt.args.arr, tt.want) {
+				t.Errorf("BucketSortAsync() = %v, want %v", tt.args.arr, tt.want)
+			}
+		})
+	}
+}
+
 func TestInsertionSort(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

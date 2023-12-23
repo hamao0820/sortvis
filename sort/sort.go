@@ -25,6 +25,7 @@ type SortIterator struct {
 var Sorters = map[string]*SortIterator{
 	"bubble": NewSorter(BubbleSortAsync),
 	"heap":   NewSorter(HeapSortAsync),
+	"bucket": NewSorter(BucketSortAsync),
 }
 
 func NewSorter(sort func(arr []int, cStep, cDone chan struct{}, wg *sync.WaitGroup)) *SortIterator {

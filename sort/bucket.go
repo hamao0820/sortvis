@@ -1,5 +1,7 @@
 package sort
 
+import "sync"
+
 func BucketSort(arr []int) {
 	n := len(arr)
 	if n <= 1 {
@@ -31,7 +33,10 @@ func BucketSort(arr []int) {
 	}
 }
 
-func BucketSortAsync(arr []int, c chan struct{}) {
+func BucketSortAsync(arr []int, step, done chan struct{}, wg *sync.WaitGroup) {
+	wg.Done()
+	defer (func() { done <- struct{}{} })()
+
 	n := len(arr)
 	if n <= 1 {
 		return
@@ -55,8 +60,9 @@ func BucketSortAsync(arr []int, c chan struct{}) {
 	i := 0
 	for j := 0; j < len(bucket); j++ {
 		for bucket[j] > 0 {
-			<-c
+			<-step
 			arr[i] = j + min
+			wg.Done()
 			i++
 			bucket[j]--
 		}
