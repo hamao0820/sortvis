@@ -1,5 +1,7 @@
 package sort
 
+import "sync"
+
 func SelectionSort(arr []int) {
 	for i := 0; i < len(arr); i++ {
 		min := i
@@ -13,7 +15,9 @@ func SelectionSort(arr []int) {
 	}
 }
 
-func SelectionSortAsync(arr []int, c chan struct{}) {
+func SelectionSortAsync(arr []int, step, done chan struct{}, wg *sync.WaitGroup) {
+	wg.Done()
+
 	for i := 0; i < len(arr); i++ {
 		min := i
 		for j := i + 1; j < len(arr); j++ {
@@ -22,7 +26,10 @@ func SelectionSortAsync(arr []int, c chan struct{}) {
 			}
 		}
 
-		<-c
+		<-step
 		swap(&arr[i], &arr[min])
+		wg.Done()
 	}
+
+	done <- struct{}{}
 }
