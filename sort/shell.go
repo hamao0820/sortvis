@@ -1,5 +1,7 @@
 package sort
 
+import "sync"
+
 func ShellSort(arr []int) {
 	var i, j int
 
@@ -16,7 +18,9 @@ func ShellSort(arr []int) {
 	}
 }
 
-func ShellSortAsync(arr []int, c chan struct{}) {
+func ShellSortAsync(arr []int, step, done chan struct{}, wg *sync.WaitGroup) {
+	wg.Done()
+
 	var i, j int
 
 	H := [5]int{57, 23, 10, 4, 1}
@@ -25,10 +29,13 @@ func ShellSortAsync(arr []int, c chan struct{}) {
 		for i = h; i < len(arr); i++ {
 			j = i
 			for j >= h && arr[j] < arr[j-h] {
-				<-c
+				<-step
 				swap(&arr[j], &arr[j-h])
+				wg.Done()
 				j -= h
 			}
 		}
 	}
+
+	done <- struct{}{}
 }

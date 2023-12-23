@@ -30,6 +30,7 @@ var Sorters = map[string]*SortIterator{
 	"merge":     NewSorter(MergeSortAsync),
 	"quick":     NewSorter(QuickSortAsync),
 	"selection": NewSorter(SelectionSortAsync),
+	"shell":     NewSorter(ShellSortAsync),
 }
 
 func NewSorter(sort func(arr []int, cStep, cDone chan struct{}, wg *sync.WaitGroup)) *SortIterator {

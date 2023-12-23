@@ -231,3 +231,17 @@ func TestShellSort(t *testing.T) {
 		})
 	}
 }
+
+func TestShellSortAsync(t *testing.T) {
+	for _, tt := range tests {
+		shell := NewSorter(ShellSortAsync)
+		shell.Init(tt.args.arr)
+		t.Run(tt.name, func(t *testing.T) {
+			for shell.Next() {
+			}
+			if !reflect.DeepEqual(tt.args.arr, tt.want) {
+				t.Errorf("ShellSortAsync() = %v, want %v", tt.args.arr, tt.want)
+			}
+		})
+	}
+}
