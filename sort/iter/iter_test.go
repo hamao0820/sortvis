@@ -1,4 +1,4 @@
-package sort
+package iter
 
 import (
 	"math/rand"
@@ -48,8 +48,11 @@ var tests = []TestCase{
 
 func TestBubbleSort(t *testing.T) {
 	for _, tt := range tests {
+		bubble := Sorters["bubble"]
+		bubble.Init(tt.args.arr)
 		t.Run(tt.name, func(t *testing.T) {
-			BubbleSort(tt.args.arr)
+			for bubble.Next() {
+			}
 			if !reflect.DeepEqual(tt.args.arr, tt.want) {
 				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
 			}
@@ -59,76 +62,91 @@ func TestBubbleSort(t *testing.T) {
 
 func TestMergeSort(t *testing.T) {
 	for _, tt := range tests {
+		merge := NewIterator(MergeSort)
+		merge.Init(tt.args.arr)
 		t.Run(tt.name, func(t *testing.T) {
-			MergeSort(tt.args.arr)
+			for merge.Next() {
+			}
 			if !reflect.DeepEqual(tt.args.arr, tt.want) {
-				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
+				t.Errorf("MergeSort() = %v, want %v", tt.args.arr, tt.want)
 			}
 		})
 	}
 }
-
 func TestHeapSort(t *testing.T) {
 	for _, tt := range tests {
+		heap := NewIterator(HeapSort)
+		heap.Init(tt.args.arr)
 		t.Run(tt.name, func(t *testing.T) {
-			HeapSort(tt.args.arr)
+			for heap.Next() {
+			}
 			if !reflect.DeepEqual(tt.args.arr, tt.want) {
-				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
+				t.Errorf("HeapSort() = %v, want %v", tt.args.arr, tt.want)
 			}
 		})
 	}
 }
-
 func TestQuickSort(t *testing.T) {
 	for _, tt := range tests {
+		quick := NewIterator(QuickSort)
+		quick.Init(tt.args.arr)
 		t.Run(tt.name, func(t *testing.T) {
-			QuickSort(tt.args.arr)
+			for quick.Next() {
+			}
 			if !reflect.DeepEqual(tt.args.arr, tt.want) {
-				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
+				t.Errorf("QuickSort() = %v, want %v", tt.args.arr, tt.want)
 			}
 		})
 	}
 }
-
 func TestSelectionSort(t *testing.T) {
 	for _, tt := range tests {
+		selection := NewIterator(SelectionSort)
+		selection.Init(tt.args.arr)
 		t.Run(tt.name, func(t *testing.T) {
-			SelectionSort(tt.args.arr)
+			for selection.Next() {
+			}
 			if !reflect.DeepEqual(tt.args.arr, tt.want) {
-				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
+				t.Errorf("SelectionSort() = %v, want %v", tt.args.arr, tt.want)
 			}
 		})
 	}
 }
-
 func TestBucketSort(t *testing.T) {
 	for _, tt := range tests {
+		bucket := NewIterator(BucketSort)
+		bucket.Init(tt.args.arr)
 		t.Run(tt.name, func(t *testing.T) {
-			BucketSort(tt.args.arr)
+			for bucket.Next() {
+			}
 			if !reflect.DeepEqual(tt.args.arr, tt.want) {
-				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
+				t.Errorf("BucketSort() = %v, want %v", tt.args.arr, tt.want)
 			}
 		})
 	}
 }
-
 func TestInsertionSort(t *testing.T) {
 	for _, tt := range tests {
+		insertion := NewIterator(InsertionSort)
+		insertion.Init(tt.args.arr)
 		t.Run(tt.name, func(t *testing.T) {
-			InsertionSort(tt.args.arr)
+			for insertion.Next() {
+			}
 			if !reflect.DeepEqual(tt.args.arr, tt.want) {
-				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
+				t.Errorf("InsertionSort() = %v, want %v", tt.args.arr, tt.want)
 			}
 		})
 	}
 }
-
 func TestShellSort(t *testing.T) {
 	for _, tt := range tests {
+		shell := NewIterator(ShellSort)
+		shell.Init(tt.args.arr)
 		t.Run(tt.name, func(t *testing.T) {
-			ShellSort(tt.args.arr)
+			for shell.Next() {
+			}
 			if !reflect.DeepEqual(tt.args.arr, tt.want) {
-				t.Errorf("BubbleSort() = %v, want %v", tt.args.arr, tt.want)
+				t.Errorf("ShellSort() = %v, want %v", tt.args.arr, tt.want)
 			}
 		})
 	}

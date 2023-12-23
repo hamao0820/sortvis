@@ -1,6 +1,11 @@
-package sort
+package iter
 
-func BucketSort(arr []int) {
+import "sync"
+
+func BucketSort(arr []int, step, done chan struct{}, wg *sync.WaitGroup) {
+	wg.Done()
+	defer (func() { done <- struct{}{} })()
+
 	n := len(arr)
 	if n <= 1 {
 		return
@@ -24,7 +29,9 @@ func BucketSort(arr []int) {
 	i := 0
 	for j := 0; j < len(bucket); j++ {
 		for bucket[j] > 0 {
+			<-step
 			arr[i] = j + min
+			wg.Done()
 			i++
 			bucket[j]--
 		}

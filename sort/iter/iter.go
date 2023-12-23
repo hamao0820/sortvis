@@ -1,4 +1,4 @@
-package sort
+package iter
 
 import (
 	"sync"
@@ -23,17 +23,17 @@ type SortIterator struct {
 }
 
 var Sorters = map[string]*SortIterator{
-	"bubble":    NewSorter(BubbleSortAsync),
-	"heap":      NewSorter(HeapSortAsync),
-	"bucket":    NewSorter(BucketSortAsync),
-	"insertion": NewSorter(InsertionSortAsync),
-	"merge":     NewSorter(MergeSortAsync),
-	"quick":     NewSorter(QuickSortAsync),
-	"selection": NewSorter(SelectionSortAsync),
-	"shell":     NewSorter(ShellSortAsync),
+	"bubble":    NewIterator(BubbleSort),
+	"heap":      NewIterator(HeapSort),
+	"bucket":    NewIterator(BucketSort),
+	"insertion": NewIterator(InsertionSort),
+	"merge":     NewIterator(MergeSort),
+	"quick":     NewIterator(QuickSort),
+	"selection": NewIterator(SelectionSort),
+	"shell":     NewIterator(ShellSort),
 }
 
-func NewSorter(sort func(arr []int, cStep, cDone chan struct{}, wg *sync.WaitGroup)) *SortIterator {
+func NewIterator(sort func(arr []int, cStep, cDone chan struct{}, wg *sync.WaitGroup)) *SortIterator {
 	return &SortIterator{
 		Arr:    []int{},
 		cStep:  make(chan struct{}),
@@ -95,4 +95,8 @@ func (s *SortIterator) Next() bool {
 	}
 
 	return true
+}
+
+func swap(a, b *int) {
+	*a, *b = *b, *a
 }

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	g "github.com/hamao0820/sortvis/graph"
-	"github.com/hamao0820/sortvis/sort"
+	"github.com/hamao0820/sortvis/sort/iter"
 	"github.com/hamao0820/sortvis/util"
 	"github.com/mum4k/termdash"
 	"github.com/mum4k/termdash/container"
@@ -64,9 +64,9 @@ func Run(num int, duration int, algorithm Algorithm, file, graph string, interac
 		return err
 	}
 
-	sorter, ok := sort.Sorters[algorithm.String()]
-	if !ok {
-		return fmt.Errorf("algorithm %s is not supported", algorithm.String())
+	sorter, err := algorithm.iterator()
+	if err != nil {
+		return err
 	}
 	sorter.Init(values)
 
@@ -107,7 +107,7 @@ func Run(num int, duration int, algorithm Algorithm, file, graph string, interac
 	return nil
 }
 
-func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int, sorter *sort.SortIterator) {
+func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int, sorter *iter.SortIterator) {
 	ticker := time.NewTicker(10 * time.Millisecond)
 	defer ticker.Stop()
 
@@ -124,7 +124,7 @@ func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int,
 	}
 }
 
-func playBarChartByTick(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, sorter *sort.SortIterator) {
+func playBarChartByTick(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, sorter *iter.SortIterator) {
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
 
