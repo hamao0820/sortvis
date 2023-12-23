@@ -4,7 +4,7 @@ import (
 	"os"
 
 	g "github.com/hamao0820/sortvis/graph"
-	"github.com/hamao0820/sortvis/gui"
+	"github.com/hamao0820/sortvis/ui"
 	"github.com/hamao0820/sortvis/util"
 	"github.com/spf13/cobra"
 )
@@ -28,7 +28,7 @@ Press q or Ctrl+C to quit`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if ls {
 			cmd.Println("You can use the following algorithms(subcommands):")
-			for _, v := range []gui.Algorithm{gui.Bubble, gui.Merge, gui.Heap, gui.Quick, gui.Selection, gui.Bucket, gui.Insertion, gui.Shell} {
+			for _, v := range []ui.Algorithm{ui.Bubble, ui.Merge, ui.Heap, ui.Quick, ui.Selection, ui.Bucket, ui.Insertion, ui.Shell} {
 				cmd.Println(v.Pretty() + "(" + v.String() + ")")
 			}
 			return

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/hamao0820/sortvis/gui"
+	"github.com/hamao0820/sortvis/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var mergeCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		err := gui.Run(num, duration, gui.Merge, file, graph, interactive)
+		err := ui.Run(num, duration, ui.Merge, file, graph, interactive)
 		cobra.CheckErr(err)
 	},
 }

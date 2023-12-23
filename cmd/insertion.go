@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/hamao0820/sortvis/gui"
+	"github.com/hamao0820/sortvis/ui"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +17,7 @@ var insertionCmd = &cobra.Command{
 			cobra.CheckErr("duration must be greater than 0")
 		}
 
-		err := gui.Run(num, duration, gui.Insertion, file, graph, interactive)
+		err := ui.Run(num, duration, ui.Insertion, file, graph, interactive)
 		cobra.CheckErr(err)
 	},
 }
