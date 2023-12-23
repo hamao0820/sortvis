@@ -64,32 +64,16 @@ func Run(num int, duration int, algorithm Algorithm, file, graph string, interac
 		return err
 	}
 
-	sortChan := make(chan struct{})
-	defer close(sortChan)
-
-	switch algorithm {
-	case Bubble:
-		go sort.BubbleSortAsync(values, sortChan)
-	case Heap:
-		go sort.HeapsortAsync(values, sortChan)
-	case Merge:
-		go sort.MergeSortAsync(values, sortChan)
-	case Quick:
-		go sort.QuickSortAsync(values, sortChan)
-	case Selection:
-		go sort.SelectionSortAsync(values, sortChan)
-	case Bucket:
-		go sort.BucketSortAsync(values, sortChan)
-	case Insertion:
-		go sort.InsertionSortAsync(values, sortChan)
-	case Shell:
-		go sort.ShellSortAsync(values, sortChan)
+	sorter, ok := sort.Sorters[algorithm.String()]
+	if !ok {
+		return fmt.Errorf("algorithm %s is not supported", algorithm.String())
 	}
+	sorter.Init(values)
 
 	if interact {
-		go playBarChartByKey(ctx, bc, values, 10*time.Millisecond)
+		go playBarChartByKey(ctx, bc, values, sorter)
 	} else {
-		go playBarChartByTick(ctx, bc, values, time.Duration(duration)*time.Millisecond, sortChan)
+		go playBarChartByTick(ctx, bc, values, time.Duration(duration)*time.Millisecond, sorter)
 	}
 
 	title := algorithm.Pretty()
@@ -112,9 +96,7 @@ func Run(num int, duration int, algorithm Algorithm, file, graph string, interac
 		}
 		if interact {
 			if k.Key == keyboard.KeySpace || k.Key == 'N' {
-				if !sort.ValidSorted(values) {
-					sortChan <- struct{}{}
-				}
+				sorter.Next()
 			}
 		}
 	}
@@ -125,8 +107,8 @@ func Run(num int, duration int, algorithm Algorithm, file, graph string, interac
 	return nil
 }
 
-func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration) {
-	ticker := time.NewTicker(delay)
+func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int, sorter *sort.SortIterator) {
+	ticker := time.NewTicker(10 * time.Millisecond)
 	defer ticker.Stop()
 
 	for {
@@ -142,19 +124,18 @@ func playBarChartByKey(ctx context.Context, bc *barchart.BarChart, values []int,
 	}
 }
 
-func playBarChartByTick(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, channel chan struct{}) {
+func playBarChartByTick(ctx context.Context, bc *barchart.BarChart, values []int, delay time.Duration, sorter *sort.SortIterator) {
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
 
 	for {
 		select {
 		case <-ticker.C:
-			if !sort.ValidSorted(values) {
-				channel <- struct{}{}
-			}
 			if err := bc.Values(values, max); err != nil {
 				panic(err)
 			}
+
+			sorter.Next()
 
 		case <-ctx.Done():
 			return
