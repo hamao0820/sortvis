@@ -1,11 +1,17 @@
 package sort
 
+import "sync"
+
 func MergeSort(arr []int) {
 	mergeSort(arr, 0, len(arr)-1)
 }
 
-func MergeSortAsync(arr []int, c chan struct{}) {
-	mergeSortAsync(arr, 0, len(arr)-1, c)
+func MergeSortAsync(arr []int, step, done chan struct{}, wg *sync.WaitGroup) {
+	wg.Done()
+
+	mergeSortAsync(arr, 0, len(arr)-1, step, wg)
+
+	done <- struct{}{}
 }
 
 func merge(arr []int, left, mid, right int) {
@@ -53,18 +59,18 @@ func mergeSort(arr []int, left, right int) {
 	}
 }
 
-func mergeSortAsync(arr []int, left, right int, c chan struct{}) {
+func mergeSortAsync(arr []int, left, right int, c chan struct{}, wg *sync.WaitGroup) {
 	if left < right {
 		mid := (left + right) / 2
 
-		mergeSortAsync(arr, left, mid, c)
-		mergeSortAsync(arr, mid+1, right, c)
+		mergeSortAsync(arr, left, mid, c, wg)
+		mergeSortAsync(arr, mid+1, right, c, wg)
 
-		mergeAsync(arr, left, mid, right, c)
+		mergeAsync(arr, left, mid, right, c, wg)
 	}
 }
 
-func mergeAsync(arr []int, left, mid, right int, c chan struct{}) {
+func mergeAsync(arr []int, left, mid, right int, c chan struct{}, wg *sync.WaitGroup) {
 	tmp := make([]int, right-left+1)
 	i := left
 	j := mid + 1
@@ -96,5 +102,6 @@ func mergeAsync(arr []int, left, mid, right int, c chan struct{}) {
 	for i := 0; i < k; i++ {
 		<-c
 		arr[left+i] = tmp[i]
+		wg.Done()
 	}
 }

@@ -82,6 +82,20 @@ func TestMergeSort(t *testing.T) {
 	}
 }
 
+func TestMergeSortAsync(t *testing.T) {
+	for _, tt := range tests {
+		merge := NewSorter(MergeSortAsync)
+		merge.Init(tt.args.arr)
+		t.Run(tt.name, func(t *testing.T) {
+			for merge.Next() {
+			}
+			if !reflect.DeepEqual(tt.args.arr, tt.want) {
+				t.Errorf("MergeSortAsync() = %v, want %v", tt.args.arr, tt.want)
+			}
+		})
+	}
+}
+
 func TestHeapSort(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
