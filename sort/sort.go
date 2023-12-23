@@ -24,6 +24,7 @@ type SortIterator struct {
 
 var Sorters = map[string]*SortIterator{
 	"bubble": NewSorter(BubbleSortAsync),
+	"heap":   NewSorter(HeapSortAsync),
 }
 
 func NewSorter(sort func(arr []int, cStep, cDone chan struct{}, wg *sync.WaitGroup)) *SortIterator {
@@ -61,7 +62,7 @@ func (s *SortIterator) Next() bool {
 	if s.Status == Initialized {
 		s.Status = Sorting
 
-		s.wg.Add(1)
+		s.wg.Add(1) // for the first step
 		go s.sort(s.Arr, s.cStep, s.cDone, s.wg)
 		s.wg.Wait()
 	}

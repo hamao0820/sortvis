@@ -1,29 +1,37 @@
 package sort
 
+import (
+	"sync"
+)
+
 const MAX = 1000
 
-func Heapsort(arr []int) {
+func HeapSort(arr []int) {
 	heapify(arr)
 	for i := len(arr) - 1; i > 0; i-- {
-		arr[i] = deletemax(arr[:i+1])
+		arr[i] = deleteMax(arr[:i+1])
 	}
 }
 
-func HeapsortAsync(arr []int, c chan struct{}) {
-	heapifyAsync(arr, c)
+func HeapSortAsync(arr []int, step, done chan struct{}, wg *sync.WaitGroup) {
+	wg.Done()
+
+	heapifyAsync(arr, step, wg)
 	for i := len(arr) - 1; i > 0; i-- {
-		<-c
-		arr[i] = deletemaxAsync(arr[:i+1], c)
+		<-step
+		arr[i] = deleteMaxAsync(arr[:i+1], step, wg) // deleteMaxAsyncの中でwg.Done()が呼ばれる
 	}
+
+	done <- struct{}{}
 }
 
 func heapify(arr []int) {
 	for i := len(arr)/2 - 1; i >= 0; i-- {
-		downmax(i, arr, len(arr))
+		downMax(i, arr, len(arr))
 	}
 }
 
-func downmax(i int, arr []int, n int) {
+func downMax(i int, arr []int, n int) {
 	j := 2*i + 1
 
 	if j >= n {
@@ -36,24 +44,25 @@ func downmax(i int, arr []int, n int) {
 
 	if arr[j] > arr[i] {
 		swap(&arr[i], &arr[j])
-		downmax(j, arr, n)
+		downMax(j, arr, n)
 	}
 }
 
-func deletemax(arr []int) int {
+func deleteMax(arr []int) int {
 	max := arr[0]
 	arr[0] = arr[len(arr)-1]
-	downmax(0, arr, len(arr)-1)
+	downMax(0, arr, len(arr)-1)
 	return max
 }
 
-func heapifyAsync(arr []int, c chan struct{}) {
+func heapifyAsync(arr []int, c chan struct{}, wg *sync.WaitGroup) {
 	for i := len(arr)/2 - 1; i >= 0; i-- {
-		downmaxAsync(i, arr, len(arr), c)
+
+		downMaxAsync(i, arr, len(arr), c, wg)
 	}
 }
 
-func downmaxAsync(i int, arr []int, n int, c chan struct{}) {
+func downMaxAsync(i int, arr []int, n int, c chan struct{}, wg *sync.WaitGroup) {
 	j := 2*i + 1
 
 	if j >= n {
@@ -65,15 +74,25 @@ func downmaxAsync(i int, arr []int, n int, c chan struct{}) {
 	}
 
 	if arr[j] > arr[i] {
+
 		<-c
 		swap(&arr[i], &arr[j])
-		downmaxAsync(j, arr, n, c)
+		wg.Done()
+
+		downMaxAsync(j, arr, n, c, wg)
 	}
+
 }
 
-func deletemaxAsync(arr []int, c chan struct{}) int {
+func deleteMaxAsync(arr []int, c chan struct{}, wg *sync.WaitGroup) int {
+	wg.Done()
+
 	max := arr[0]
+
+	<-c
 	arr[0] = arr[len(arr)-1]
-	downmaxAsync(0, arr, len(arr)-1, c)
+	wg.Done()
+
+	downMaxAsync(0, arr, len(arr)-1, c, wg)
 	return max
 }
