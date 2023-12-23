@@ -28,6 +28,7 @@ var Sorters = map[string]*SortIterator{
 	"bucket":    NewSorter(BucketSortAsync),
 	"insertion": NewSorter(InsertionSortAsync),
 	"merge":     NewSorter(MergeSortAsync),
+	"quick":     NewSorter(QuickSortAsync),
 }
 
 func NewSorter(sort func(arr []int, cStep, cDone chan struct{}, wg *sync.WaitGroup)) *SortIterator {

@@ -132,6 +132,20 @@ func TestQuickSort(t *testing.T) {
 	}
 }
 
+func TestQuickSortAsync(t *testing.T) {
+	for _, tt := range tests {
+		quick := NewSorter(QuickSortAsync)
+		quick.Init(tt.args.arr)
+		t.Run(tt.name, func(t *testing.T) {
+			for quick.Next() {
+			}
+			if !reflect.DeepEqual(tt.args.arr, tt.want) {
+				t.Errorf("QuickSortAsync() = %v, want %v", tt.args.arr, tt.want)
+			}
+		})
+	}
+}
+
 func TestSelectionSort(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
