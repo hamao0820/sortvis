@@ -1,5 +1,7 @@
 package sort
 
+import "sync"
+
 func InsertionSort(arr []int) {
 	var i, j int
 
@@ -12,15 +14,19 @@ func InsertionSort(arr []int) {
 	}
 }
 
-func InsertionSortAsync(arr []int, c chan struct{}) {
+func InsertionSortAsync(arr []int, step, done chan struct{}, wg *sync.WaitGroup) {
+	wg.Done()
 	var i, j int
 
 	for i = 1; i < len(arr); i++ {
 		j = i
 		for j > 0 && arr[j] < arr[j-1] {
-			<-c
+			<-step
 			swap(&arr[j], &arr[j-1])
+			wg.Done()
 			j--
 		}
 	}
+
+	done <- struct{}{}
 }

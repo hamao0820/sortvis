@@ -165,6 +165,20 @@ func TestInsertionSort(t *testing.T) {
 	}
 }
 
+func TestInsertionSortAsync(t *testing.T) {
+	for _, tt := range tests {
+		insertion := NewSorter(InsertionSortAsync)
+		insertion.Init(tt.args.arr)
+		t.Run(tt.name, func(t *testing.T) {
+			for insertion.Next() {
+			}
+			if !reflect.DeepEqual(tt.args.arr, tt.want) {
+				t.Errorf("InsertionSortAsync() = %v, want %v", tt.args.arr, tt.want)
+			}
+		})
+	}
+}
+
 func TestShellSort(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
